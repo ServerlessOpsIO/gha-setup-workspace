@@ -6,21 +6,23 @@ _*NOTE: This workflow is opinionated and meets the needs of its author. It is pr
 
 The `gha-setup-workspace` action performs the following tasks:
 * Sets additional GitHub Actions environment variables.
-* Checks the job type (build or deploy).
-* Checks out the source code if the job type is not `deploy`.
+* Checks the job of checkout (source or artifact)
+* Checks out the source code if checkout_artifact is `false`.
 * Determines the artifact name based on the provided override or generates a default name.
-* Downloads the artifact if the job type is `deploy`.
+* Downloads the artifact if checkout_artifact is `true`
+* .
 
 ## Inputs
 
-- `job_type` (required): The type of job action is executing in. Must be either `build` or `deploy`.
 - `artifact_name_override` (optional): Override the name of the artifact to use. Default is an empty string which determines the artifact name automatically. 
+- `checkout_artifact` (optional): Whether to checkout artifact instead of source. Value must be `true` or `false`.
 - `checkout_fetch_depth` (optional): The number of commits to fetch. Change to `0` if performing a merge.
 
 ## Outputs
 
 - `artifact_name`: The name of the artifact downloaded.
-- `job_type`: The type of job action is executing in.
+- `is_artifact`: Checkout type is artifact.
+- `is_source`: Checkout type is source.
 
 ## Usage
 
@@ -56,4 +58,3 @@ Contributions are welcome! Please open an issue or submit a pull request for any
 ## Contact
 
 For any questions or support, please open an issue in this repository.
-
