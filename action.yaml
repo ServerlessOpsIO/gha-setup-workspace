@@ -5,7 +5,6 @@ inputs:
   artifact_name_override:
     description: Override name of artifact to use
     required: false
-    default: ''
   checkout_fetch_depth:
     description: Depth to fetch repository
     required: false
