@@ -40,7 +40,7 @@ runs:
 
     - name: Checkout source
       id: checkout-source
-      if: inputs.checkout_artifact == false
+      if: inputs.checkout_artifact == 'false'
       uses: actions/checkout@v4
       with:
         fetch-depth: ${{ inputs.checkout_fetch_depth }}
@@ -49,8 +49,11 @@ runs:
     - name: Get artifact name
       id: get-artifact-name
       shell: bash
+      env:
+        ARTIFACT_NAME_OVERRIDE: ${{ inputs.artifact_name_override }}
       run: |
-        if [ ${{ inputs.artifact_name_override }} != '' ]; then
+        echo $ARTIFACT_NAME_OVERRIDE
+        if [ '${{ inputs.artifact_name_override }}' != '' ]; then
           name="${{ inputs.artifact_name_override }}";
         else
           name="${{ env.GITHUB_REPOSITORY_SLUG }}-${{ env.GITHUB_REF_SLUG_URL }}-${{ github.run_number }}-${{ github.sha }}";
@@ -59,7 +62,7 @@ runs:
 
     - name: Download artifact
       id: download-artifact
-      if: inputs.checkout_artifact == true
+      if: inputs.checkout_artifact == 'true'
       uses: actions/download-artifact@v4
       with:
         name: ${{ steps.get-artifact-name.outputs.artifact-name }}
