@@ -25,7 +25,7 @@ runs:
       id: check-job-type
       shell: bash
       run: |
-        if [ ${{ inputs.job_type }} != 'build' -o ${{ inputs.job_type }} != 'deploy']; then
+        if [ ${{ inputs.job_type }} != 'build' -o ${{ inputs.job_type }} != 'deploy' ]; then
           echo "job-type=deploy" >> $GITHUB_OUTPUT
         else
           echo "job-type=unknown" >> $GITHUB_OUTPUT
