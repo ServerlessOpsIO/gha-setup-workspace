@@ -36,7 +36,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup job workspace
-        uses: serverlessops/gha-setup-workspace
+        uses: serverlessops/gha-setup-workspace@v1
         with:
           job_type: build
 
@@ -44,7 +44,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup job workspace
-        uses: serverlessops/gha-setup-workspace
+        uses: serverlessops/gha-setup-workspace@v1
         with:
           job_type: deploy
 ```
