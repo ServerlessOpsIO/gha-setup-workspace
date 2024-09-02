@@ -1,0 +1,62 @@
+name: 'setup-workspace'
+description: 'Setup job workspace'
+
+inputs:
+  artifact_name_override:
+    description: Override name of artifact to use
+    required: false
+    default: ''
+  job_type:
+    description: Type of job action is executing in
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Set extra GitHub environment variables
+      id: github-env-vars
+      uses: rlespinasse/github-slug-action@v4
+
+    - name: Check job type
+      id: check-job-type
+      shell: bash
+      run: |
+        if [ ${{ inputs.job_type }} != 'build' -o ${{ inputs.job_type }} != 'deploy']; then
+          echo "job-type=deploy" >> $GITHUB_OUTPUT
+        else
+          echo "job-type=unknown" >> $GITHUB_OUTPUT
+          echo "Unknown job type: ${{ inputs.job_type }}" >> $GITHUB_STEP_SUMMARY
+          exit 1
+        fi
+
+    - name: Checkout source
+      id: checkout-source
+      if: inputs.job_type == 'build'
+      uses: actions/checkout@v4
+
+    # This is helpful
+    - name: Get artifact name
+      id: get-artifact-name
+      shell: bash
+      run: |
+        if [ ${{ inputs.artifact_name_override }} != '' ]; then
+          name="${{ inputs.artifact_name_override }}";
+        else
+          name="${{ env.GITHUB_REPOSITORY_SLUG }}-${{ env.GITHUB_REF_SLUG_URL }}-${{ github.run_number }}-${{ github.sha }}";
+        fi;
+        echo "artifact-name=$name" >> $GITHUB_OUTPUT
+
+    - name: Download artifact
+      id: download-artifact
+      if: inputs.job_type == 'deploy'
+      uses: actions/download-artifact@v4
+      with:
+        name: ${{ steps.get-artifact-name.outputs.artifact-name }}
+
+outputs:
+    artifact_name:
+        description: Name of artifact downloaded
+        value: ${{ steps.get-artifact-name.outputs.artifact-name }}
+    job_type:
+        description: Type of job action is executing in
+        value: ${{ steps.check-job-type.outputs.job-type }}
