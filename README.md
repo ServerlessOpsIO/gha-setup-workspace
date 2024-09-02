@@ -15,6 +15,7 @@ The `gha-setup-workspace` action performs the following tasks:
 
 - `job_type` (required): The type of job action is executing in. Must be either `build` or `deploy`.
 - `artifact_name_override` (optional): Override the name of the artifact to use. Default is an empty string which determines the artifact name automatically. 
+- `checkout_fetch_depth` (optional): The number of commits to fetch. Change to `0` if performing a merge.
 
 ## Outputs
 
@@ -47,10 +48,6 @@ jobs:
         with:
           job_type: deploy
 ```
-
-## License
-
-This project is licensed under the MIT License. See the LICENSE file for details.
 
 ## Contributing
 

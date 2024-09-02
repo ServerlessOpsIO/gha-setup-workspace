@@ -6,6 +6,10 @@ inputs:
     description: Override name of artifact to use
     required: false
     default: ''
+  checkout_fetch_depth:
+    description: Depth to fetch repository
+    required: false
+    default: '1'
   job_type:
     description: Type of job action is executing in
     required: true
@@ -33,6 +37,8 @@ runs:
       id: checkout-source
       if: inputs.job_type == 'build'
       uses: actions/checkout@v4
+      with:
+        fetch-depth: ${{ inputs.checkout_fetch_depth }}
 
     # This is helpful
     - name: Get artifact name
