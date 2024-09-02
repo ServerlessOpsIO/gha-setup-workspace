@@ -9,9 +9,10 @@ inputs:
     description: Depth to fetch repository
     required: false
     default: '1'
-  job_type:
-    description: Type of job action is executing in
-    required: true
+  checkout_artifact:
+    description: Whether to checkout artifact instead of source
+    required: false
+    default: 'false'
 
 runs:
   using: composite
@@ -20,21 +21,26 @@ runs:
       id: github-env-vars
       uses: rlespinasse/github-slug-action@v4
 
-    - name: Check job type
-      id: check-job-type
+    - name: Check checkout type
+      id: checkout-type
       shell: bash
+      env:
+        CHECKOUT_ARTIFACT: ${{ inputs.checkout_artifact }}
       run: |
-        if [ ${{ inputs.job_type }} != 'build' -o ${{ inputs.job_type }} != 'deploy' ]; then
-          echo "job-type=deploy" >> $GITHUB_OUTPUT
+        if [ "$CHECKOUT_ARTIFACT" = "true" ] ; then
+          echo "is_artifact=true" >> $GITHUB_OUTPUT
+          echo "is_source=false" >> $GITHUB_OUTPUT
+        elif [ "$CHECKOUT_ARTIFACT" = "false" ] ; then
+          echo "is_artifact=false" >> $GITHUB_OUTPUT
+          echo "is_source=true" >> $GITHUB_OUTPUT
         else
-          echo "job-type=unknown" >> $GITHUB_OUTPUT
-          echo "Unknown job type: ${{ inputs.job_type }}" >> $GITHUB_STEP_SUMMARY
+          echo "checkout_artifact must be `true` or `false`"
           exit 1
         fi
 
     - name: Checkout source
       id: checkout-source
-      if: inputs.job_type == 'build'
+      if: inputs.checkout_artifact == false
       uses: actions/checkout@v4
       with:
         fetch-depth: ${{ inputs.checkout_fetch_depth }}
@@ -53,7 +59,7 @@ runs:
 
     - name: Download artifact
       id: download-artifact
-      if: inputs.job_type == 'deploy'
+      if: inputs.checkout_artifact == true
       uses: actions/download-artifact@v4
       with:
         name: ${{ steps.get-artifact-name.outputs.artifact-name }}
@@ -62,6 +68,9 @@ outputs:
     artifact_name:
         description: Name of artifact downloaded
         value: ${{ steps.get-artifact-name.outputs.artifact-name }}
-    job_type:
-        description: Type of job action is executing in
-        value: ${{ steps.check-job-type.outputs.job-type }}
+    is_artifact:
+        description: Checkout type is artifact
+        value: ${{ steps.checkout-type.outputs.is_artifact }}
+    is_source:
+        description: Checkout type is source
+        value: ${{ steps.checkout-type.outputs.is_source }}
