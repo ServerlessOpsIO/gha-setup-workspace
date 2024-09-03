@@ -45,32 +45,23 @@ runs:
       with:
         fetch-depth: ${{ inputs.checkout_fetch_depth }}
 
-    # This is helpful
-    - name: Get artifact name
-      id: get-artifact-name
-      shell: bash
-      env:
-        ARTIFACT_NAME_OVERRIDE: ${{ inputs.artifact_name_override }}
-      run: |
-        echo $ARTIFACT_NAME_OVERRIDE
-        if [ '${{ inputs.artifact_name_override }}' != '' ]; then
-          name="${{ inputs.artifact_name_override }}";
-        else
-          name="${{ env.GITHUB_REPOSITORY_SLUG }}-${{ env.GITHUB_REF_SLUG_URL }}-${{ github.run_number }}-${{ github.sha }}";
-        fi;
-        echo "artifact-name=$name" >> $GITHUB_OUTPUT
+    - name: Set artifact name
+      id: set-artifact-name
+      uses: ServerlessOpsIO/gha-artifact-name@v1
+      with:
+        artifact_name_override: ${{ inputs.artifact_name_override }}
 
     - name: Download artifact
       id: download-artifact
       if: inputs.checkout_artifact == 'true'
       uses: actions/download-artifact@v4
       with:
-        name: ${{ steps.get-artifact-name.outputs.artifact-name }}
+        name: ${{ steps.set-artifact-name.outputs.artifact-name }}
 
 outputs:
     artifact_name:
         description: Name of artifact downloaded
-        value: ${{ steps.get-artifact-name.outputs.artifact-name }}
+        value: ${{ steps.set-artifact-name.outputs.artifact-name }}
     is_artifact:
         description: Checkout type is artifact
         value: ${{ steps.checkout-type.outputs.is_artifact }}
