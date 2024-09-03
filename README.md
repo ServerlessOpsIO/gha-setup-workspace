@@ -49,6 +49,26 @@ jobs:
           checkout_artifact: true
 ```
 
+### Artifact naming
+
+Both [ServerlessOpsIO/gha-setup-workspace](https://github.com/ServerlessOpsIO/gha-setup-workspace) and [ServerlessOpsIO/gha-store-artifacts](https://github.com/ServerlessOpsIO/gha-store-artifacts) use the same [utility action](https://github.com/ServerlessOpsIO/gha-artifact-name) to set an artifact name if `artifact_name_override` is not set. If your workflow sets _artifact_name_override_ for `ServerlessOpsIO/gha-setup-workspace` be sure to use that actions _artifact_name_ output to set _artifact_name_override_ for `ServerlessOpsIO/gha-store-artifacts`.
+
+See the example below:
+
+```yaml
+- name: Setup job workspace
+  id: setup-workspace
+  uses: ServerlessOpsIO/gha-setup-workspace@v1
+  with:
+    artifact_name_override: 'my-artifact'
+
+
+- name: Store Artifacts
+  uses: ServerlessOpsIO/gha-store-artifacts@v1
+  with:
+    artifact_name_override: '${{ steps.setup-workspace.outputs.artifact_name }}'
+```
+
 ## Contributing
 
 Contributions are welcome! Please open an issue or submit a pull request for any changes.
