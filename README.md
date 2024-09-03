@@ -39,8 +39,6 @@ jobs:
     steps:
       - name: Setup job workspace
         uses: ServerlessOpsIO/gha-setup-workspace@v1
-        with:
-          job_type: build
 
   deploy:
     runs-on: ubuntu-latest
@@ -48,7 +46,7 @@ jobs:
       - name: Setup job workspace
         uses: ServerlessOpsIO/gha-setup-workspace@v1
         with:
-          job_type: deploy
+          checkout_artifact: true
 ```
 
 ## Contributing
