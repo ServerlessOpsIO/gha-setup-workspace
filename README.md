@@ -20,9 +20,9 @@ The `gha-setup-workspace` action performs the following tasks:
 
 ## Outputs
 
-- `artifact_name`: The name of the artifact downloaded.
-- `is_artifact`: Checkout type is artifact.
-- `is_source`: Checkout type is source.
+- `artifact-name`: The name of the artifact downloaded.
+- `is-artifact`: Checkout type is artifact.
+- `is-source`: Checkout type is source.
 
 ## Usage
 
