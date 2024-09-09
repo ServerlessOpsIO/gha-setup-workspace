@@ -28,11 +28,11 @@ runs:
         CHECKOUT_ARTIFACT: ${{ inputs.checkout_artifact }}
       run: |
         if [ "$CHECKOUT_ARTIFACT" = "true" ] ; then
-          echo "is_artifact=true" >> $GITHUB_OUTPUT
-          echo "is_source=false" >> $GITHUB_OUTPUT
+          echo "is-artifact=true" >> $GITHUB_OUTPUT
+          echo "is-source=false" >> $GITHUB_OUTPUT
         elif [ "$CHECKOUT_ARTIFACT" = "false" ] ; then
-          echo "is_artifact=false" >> $GITHUB_OUTPUT
-          echo "is_source=true" >> $GITHUB_OUTPUT
+          echo "is-artifact=false" >> $GITHUB_OUTPUT
+          echo "is-source=true" >> $GITHUB_OUTPUT
         else
           echo "checkout_artifact must be `true` or `false`"
           exit 1
@@ -59,12 +59,12 @@ runs:
         name: ${{ steps.set-artifact-name.outputs.artifact-name }}
 
 outputs:
-    artifact_name:
+    artifact-name:
         description: Name of artifact downloaded
         value: ${{ steps.set-artifact-name.outputs.artifact-name }}
-    is_artifact:
+    is-artifact:
         description: Checkout type is artifact
-        value: ${{ steps.checkout-type.outputs.is_artifact }}
-    is_source:
+        value: ${{ steps.checkout-type.outputs.is-artifact }}
+    is-source:
         description: Checkout type is source
-        value: ${{ steps.checkout-type.outputs.is_source }}
+        value: ${{ steps.checkout-type.outputs.is-source }}
