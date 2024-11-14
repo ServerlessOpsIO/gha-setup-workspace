@@ -1,0 +1,13 @@
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: gha-setup-workspace
+  description: GitHub Actions composite actions to setup workspace
+  annotations:
+    github.com/project-slug: ServerlessOpsIO/gha-setup-workspace
+spec:
+  type: gha-action
+  lifecycle: production
+  owner: group:developers
+  system: system:github-actions
