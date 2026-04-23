@@ -16,7 +16,7 @@ runs:
   steps:
     - name: Set extra GitHub environment variables
       id: github-env-vars
-      uses: rlespinasse/github-slug-action@v4
+      uses: rlespinasse/github-slug-action@v5
 
     - name: Check checkout type
       id: checkout-type
@@ -38,14 +38,14 @@ runs:
     - name: Checkout source
       id: checkout-source
       if: inputs.checkout_artifact == 'false'
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
       with:
         fetch-depth: ${{ inputs.checkout_fetch_depth }}
 
     - name: Download artifact
       id: download-artifact
       if: inputs.checkout_artifact == 'true'
-      uses: actions/download-artifact@v5
+      uses: actions/download-artifact@v8
 
 outputs:
     is-artifact:
