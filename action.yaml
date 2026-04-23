@@ -16,7 +16,7 @@ runs:
   steps:
     - name: Set extra GitHub environment variables
       id: github-env-vars
-      uses: rlespinasse/github-slug-action@v4
+      uses: rlespinasse/github-slug-action@v5
 
     - name: Check checkout type
       id: checkout-type
