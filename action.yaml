@@ -2,9 +2,6 @@ name: 'setup-workspace'
 description: 'Setup job workspace'
 
 inputs:
-  artifact_name_override:
-    description: Override name of artifact to use
-    required: false
   checkout_fetch_depth:
     description: Depth to fetch repository
     required: false
@@ -45,23 +42,12 @@ runs:
       with:
         fetch-depth: ${{ inputs.checkout_fetch_depth }}
 
-    - name: Set artifact name
-      id: set-artifact-name
-      uses: ServerlessOpsIO/gha-artifact-name@v1
-      with:
-        artifact_name_override: ${{ inputs.artifact_name_override }}
-
     - name: Download artifact
       id: download-artifact
       if: inputs.checkout_artifact == 'true'
       uses: actions/download-artifact@v5
-      with:
-        name: ${{ steps.set-artifact-name.outputs.artifact-name }}
 
 outputs:
-    artifact-name:
-        description: Name of artifact downloaded
-        value: ${{ steps.set-artifact-name.outputs.artifact-name }}
     is-artifact:
         description: Checkout type is artifact
         value: ${{ steps.checkout-type.outputs.is-artifact }}
