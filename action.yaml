@@ -45,7 +45,7 @@ runs:
     - name: Download artifact
       id: download-artifact
       if: inputs.checkout_artifact == 'true'
-      uses: actions/download-artifact@v5
+      uses: actions/download-artifact@v8
 
 outputs:
     is-artifact:
