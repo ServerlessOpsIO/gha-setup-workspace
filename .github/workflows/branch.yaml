@@ -22,7 +22,7 @@ jobs:
 
       - name: Checkout source
         id: checkout-source
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Schema Validation
         id: schema-validation
